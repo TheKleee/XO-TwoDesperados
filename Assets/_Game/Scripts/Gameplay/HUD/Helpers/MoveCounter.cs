@@ -1,16 +1,10 @@
+using TMPro;
 using UnityEngine;
 
 public class MoveCounter : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] TMP_Text[] moveCountTexts; // one per player in inspector
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public void RegisterMove(byte playerId, int count) =>
+        moveCountTexts[playerId - 1].text = $"P{playerId}: {count}";
 }

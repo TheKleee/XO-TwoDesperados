@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -7,8 +8,14 @@ public class GameManager : MonoBehaviour
     [Header("Players")]
     [SerializeField] byte playerCount = 2;
 
+    byte[] activePlayers;
+    ScoreCalculator scoreCalculator;
+
     [Header("Strike")]
     [SerializeField] GameObject strikeLinePrefab;
+
+    [Header("Popups:")]
+    [SerializeField] GameResultPopup gameResultPopup;
 
     public byte CurrentPlayer { get; private set; } = 1;
     public Vector2Int LastPlaced { get; private set; }
@@ -24,6 +31,10 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         map = FindFirstObjectByType<Map>();
+        scoreCalculator = FindFirstObjectByType<ScoreCalculator>();
+        activePlayers = new byte[playerCount];
+        for (byte i = 0; i < playerCount; i++)
+            activePlayers[i] = (byte)(i + 1);
     }
 
     public void RegisterPlacement(Vector2Int pos) =>
@@ -34,6 +45,9 @@ public class GameManager : MonoBehaviour
 
     public void OnWin(byte playerId, Vector2Int start, Vector2Int end)
     {
+        HUD.instance.StopMatch();
+
+        scoreCalculator.RecordWin(playerId, HUD.instance.MatchDuration);
         Vector3 startWorld = map.GridToWorld(start);
         Vector3 endWorld = map.GridToWorld(end);
 
@@ -41,19 +55,17 @@ public class GameManager : MonoBehaviour
         Strike strike = line.GetComponent<Strike>();
         strike.Init(startWorld, endWorld);
 
-        Debug.Log($"Player {playerId} wins!");
-        // TODO: show Game Over popup, record stats
+        gameResultPopup.OpenWin(playerId, HUD.instance.MatchDuration);
     }
 
     public void OnDraw()
     {
-        Debug.Log("Draw!");
-        // TODO: show Game Over popup, record stats
+        HUD.instance.StopMatch();
+        scoreCalculator.RecordDraw(activePlayers, HUD.instance.MatchDuration);
+        gameResultPopup.OpenDraw(HUD.instance.MatchDuration);
     }
 
-    public void RestartMatch()
-    {
-        CurrentPlayer = 1;
-        // TODO: reset map, clear virtualMap, rebuild board
-    }
+    public void RestartMatch() =>
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+    
 }

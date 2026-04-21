@@ -1,16 +1,23 @@
 using UnityEngine;
 
-public class Hud : MonoBehaviour
+public class HUD : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static HUD instance;
+
+    [SerializeField] DurationDisplay durationDisplay;
+    [SerializeField] MoveCounter moveCounter;
+
+    private void Awake()
     {
-        
+        if (instance != null) { Destroy(gameObject); return; }
+        instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public void RegisterMove(byte playerId, int count) =>
+        moveCounter.RegisterMove(playerId, count);
+
+    public void StopMatch() =>
+        durationDisplay.Stop();
+
+    public float MatchDuration => durationDisplay.Elapsed;
 }

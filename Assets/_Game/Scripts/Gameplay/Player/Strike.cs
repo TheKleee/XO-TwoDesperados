@@ -15,6 +15,7 @@ public class Strike : MonoBehaviour
 
     IEnumerator StrikeMove()
     {
+        AudioManager.instance.PlayStrike();
         while (Vector3.Distance(transform.position, target) > 0.01f)
         {
             transform.position = Vector3.MoveTowards(

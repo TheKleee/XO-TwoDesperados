@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
 
-public class MapBuilder : MonoBehaviour, IVirtualMapSqare, IStrike
+public class MapBuilder : MonoBehaviour, IVirtualMapSqare, IStrike, ISkinData
 {
     //This one will create virtual nodes and visual map lines.
     //Selecting a space between the lines will approximate to the closest node
@@ -26,8 +26,9 @@ public class MapBuilder : MonoBehaviour, IVirtualMapSqare, IStrike
     Vector3 linePos = Vector3.zero, lineRot = Vector3.zero;
 
     #region InterfaceData
-    public Vector2Int mapSize { get; set; } = new(3, 3);
+    public Vector2Int mapSize { get; set; } = new(3, 3);    
     public int strike { get; set; } = 3;
+    public Dictionary<byte, byte> playerSkinMap { get; set; }
     #endregion interace data />
 
     #region Methods
@@ -75,11 +76,6 @@ public class MapBuilder : MonoBehaviour, IVirtualMapSqare, IStrike
     {
         //Calculate offsetposition...
         map.position -= offset;
-    }
-
-    public void UpdateMap(Vector2Int pos, byte? player = null)
-    {
-        throw new System.NotImplementedException();
     }
     #endregion methods />
 }

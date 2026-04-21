@@ -2,15 +2,29 @@ using UnityEngine;
 
 public class MenuController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] ThemePopup themePopup;
+    [SerializeField] StatsPopup statsPopup;
+    [SerializeField] SettingsPopup settingsPopup;
+    [SerializeField] ExitConfirmPopup exitPopup;
 
-    // Update is called once per frame
-    void Update()
+    public void OnPlayClicked()
     {
-        
+        AudioManager.instance.PlayButtonClick();
+        themePopup.Open();
+    }
+    public void OnStatsClicked()
+    {
+        AudioManager.instance.PlayButtonClick();
+        statsPopup.Open();
+    }
+    public void OnSettingsClicked()
+    {
+        AudioManager.instance.PlayButtonClick();
+        settingsPopup.Open();
+    }
+    public void OnExitClicked()
+    {
+        AudioManager.instance.PlayButtonClick();
+        exitPopup.Open();
     }
 }
