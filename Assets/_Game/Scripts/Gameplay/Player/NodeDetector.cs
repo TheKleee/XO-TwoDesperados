@@ -101,11 +101,6 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
                 GameManager.instance.OnWin(playerId, firstNode, endpoint);
                 return true;
             }
-            //if (WalkDirection(placed, -dir, playerId) == strike)
-            //{
-            //    GameManager.instance.OnWin(playerId, endpoint, placed);
-            //    return true;
-            //}
         }
         return false;
     }
@@ -126,7 +121,6 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
             //Here we need to go backwards... from the starting point
             if (!lastSearch)
             {
-                firstPlaced = null;
                 lastSearch = true;
                 return WalkDirection(current, -dir, playerId, 1, lastSearch);
             }
