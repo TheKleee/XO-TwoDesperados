@@ -46,8 +46,9 @@ public class Map : MonoBehaviour, IVirtualMapSqare, IVirtualMapXO, IMapHelper
 
     void ReadMap()
     {
+        MapBuilder.instance.BuildMap();
         mapSize = MapBuilder.instance.mapSize;
-        background.localScale = (Vector2)mapSize;
+        background.localScale = new Vector3(mapSize.x, mapSize.y, 1);
     }
 
     /// <summary>

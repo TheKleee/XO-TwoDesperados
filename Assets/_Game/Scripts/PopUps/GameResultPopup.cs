@@ -24,10 +24,10 @@ public class GameResultPopup : MonoBehaviour
         panel.SetActive(true);
     }
 
-    public void OnRetry() => SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+    public void OnRetry() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     public void OnExit()
     {
         ((ISkinData)MapBuilder.instance).ClearSkins();
-        SceneManager.LoadSceneAsync(0);
+        SceneManager.LoadScene(0);
     }
 }

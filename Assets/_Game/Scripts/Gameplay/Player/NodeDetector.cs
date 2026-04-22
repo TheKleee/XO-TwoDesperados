@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
 {
@@ -9,10 +10,10 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
 
     static readonly Vector2Int[] CheckDirections =
     {
-        new(1,  0),  // Horizontal
-        new(0,  1),  // Vertical
-        new(1,  1),  // Diagonal
-        new(1, -1),  // Anti-diagonal
+        new(1,  0),
+        new(0,  1),
+        new(1,  1),
+        new(1, -1),
     };
 
     Vector2Int endpoint;
@@ -26,11 +27,17 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
 
     private void Update()
     {
-        if (!Input.GetMouseButtonDown(0)) return;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (!Physics.Raycast(ray, out RaycastHit hit)) return;
+        if (!IsPressed()) return;
+        Ray ray = Camera.main.ScreenPointToRay(GetScreenPosition());
+        if (!Physics.Raycast(ray, out RaycastHit hit))
+        {
+            Debug.Log("Raycast missed");
+            return;
+        }
 
         Vector2Int gridPos = map.WorldToGrid(hit.point);
+        Debug.Log($"Hit: {hit.point} | Grid: {gridPos} | OnMap: {map.IsOnMap(gridPos)}");
+
         byte currentPlayer = GameManager.instance.CurrentPlayer;
 
         if (!map.IsOnMap(gridPos) || map.virtualMap[gridPos] != null) return;
@@ -50,10 +57,23 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
             GameManager.instance.NextTurn();
     }
 
+    bool IsPressed()
+    {
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) return true;
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame) return true;
+        return false;
+    }
+
+    Vector2 GetScreenPosition()
+    {
+        if (Mouse.current != null) return Mouse.current.position.ReadValue();
+        if (Touchscreen.current != null) return Touchscreen.current.primaryTouch.position.ReadValue();
+        return Vector2.zero;
+    }
+
     public bool WinCondition(byte playerId)
     {
         Vector2Int placed = GameManager.instance.LastPlaced;
-
         foreach (var dir in CheckDirections)
         {
             if (WalkDirection(placed, dir, playerId) == strike)
@@ -61,7 +81,6 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
                 GameManager.instance.OnWin(playerId, placed, endpoint);
                 return true;
             }
-
             if (WalkDirection(placed, -dir, playerId) == strike)
             {
                 GameManager.instance.OnWin(playerId, endpoint, placed);
@@ -78,14 +97,12 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
             endpoint = current;
             return curLength;
         }
-
         Vector2Int next = current + dir;
         if (!map.IsOnMap(next) || map.virtualMap[next] != playerId)
         {
             endpoint = current;
             return curLength;
         }
-
         return WalkDirection(next, dir, playerId, ++curLength);
     }
 

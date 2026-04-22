@@ -25,11 +25,18 @@ public class SettingsPopup : MonoBehaviour
         AudioManager.instance.PlayPopup();
         panel.SetActive(true);
     }
+
     public void Close()
     {
         AudioManager.instance.PlayPopup();
         panel.SetActive(false);
     }
+
+    public void MusicToggle() =>
+        OnMusicToggled(musicToggle.isOn);
+
+    public void SfxToggle()=>
+        OnSfxToggled(sfxToggle.isOn);
 
     void OnMusicToggled(bool value)
     {

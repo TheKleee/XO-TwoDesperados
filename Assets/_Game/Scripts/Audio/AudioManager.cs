@@ -22,6 +22,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip placement;
     [SerializeField] AudioClip strike;
     [SerializeField] AudioClip popup;
+    [SerializeField] AudioClip hover;
     
     private void Start()
     {
@@ -39,6 +40,7 @@ public class AudioManager : MonoBehaviour
             sfxSource.PlayOneShot(clip);
     }
 
+    public void PlayHover() => PlaySFX(hover);
     public void PlayButtonClick() => PlaySFX(buttonClick);
     public void PlayPlacement() => PlaySFX(placement);
     public void PlayStrike() => PlaySFX(strike);

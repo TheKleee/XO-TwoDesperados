@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         map = FindFirstObjectByType<Map>();
+        playerCount = MapBuilder.instance.playerCount;
         scoreCalculator = FindFirstObjectByType<ScoreCalculator>();
         activePlayers = new byte[playerCount];
         for (byte i = 0; i < playerCount; i++)
@@ -66,6 +67,6 @@ public class GameManager : MonoBehaviour
     }
 
     public void RestartMatch() =>
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     
 }

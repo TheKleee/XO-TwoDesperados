@@ -31,10 +31,10 @@ public class StatsPopup : MonoBehaviour
     void Refresh()
     {
         StatsData stats = scoreCalculator.GetStats();
-        totalGamesText.text = $"Games Played: {stats.totalGames}";
-        drawsText.text = $"Draws: {stats.draws}";
-        avgDurationText.text = $"Avg Duration: {scoreCalculator.AverageDuration:F1}s";
+        totalGamesText.text = $"{stats.totalGames}";
+        drawsText.text = $"{stats.draws}";
+        avgDurationText.text = $"{scoreCalculator.AverageDuration:F1}s";
         for (int i = 0; i < playerWinsTexts.Length; i++)
-            playerWinsTexts[i].text = $"P{i + 1} Wins: {stats.playerWins[i]}";
+            playerWinsTexts[i].text = $"{stats.playerWins[i]}";
     }
 }

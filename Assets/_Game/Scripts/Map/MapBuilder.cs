@@ -23,12 +23,13 @@ public class MapBuilder : MonoBehaviour, IVirtualMapSqare, IStrike, ISkinData
     #endregion singleton />
     Transform map;
     [Header("Node"), SerializeField] GameObject borderLine;
-    Vector3 linePos = Vector3.zero, lineRot = Vector3.zero;
+    Vector3 lineData = Vector3.zero, lineRot = Vector3.zero;
 
     #region InterfaceData
+    public byte playerCount { get; set; } = 2;
     public Vector2Int mapSize { get; set; } = new(3, 3);    
     public int strike { get; set; } = 3;
-    public Dictionary<byte, byte> playerSkinMap { get; set; }
+    public Dictionary<byte, byte> playerSkinMap { get; set; } = new();
     #endregion interace data />
 
     #region Methods
@@ -40,25 +41,26 @@ public class MapBuilder : MonoBehaviour, IVirtualMapSqare, IStrike, ISkinData
         map = FindFirstObjectByType<Map>().transform;
         if (map == null) return;
 
-        OffsetMap(new(mapSize.x, mapSize.y, 0));
+        OffsetMap(new((float)mapSize.x / 2, 0, (float)mapSize.y / 2));
 
         //Without the first and the last element -> just the inner border
-        for (int i = 1; i < mapSize.x - 1; i++)
+        for (int i = 1; i < mapSize.x; i++)
         {
             CreateBorderLine(i, 0, false);
-            for (int j = 1; j < mapSize.y - 1; j++)
+            for (int j = 1; j < mapSize.y; j++)
             {
                 CreateBorderLine(i, j);
             }
         }
     }
 
-    void CreateBorderLine(int x, int y, bool rotate = true)
+    void CreateBorderLine(float x, float y, bool rotate = true)
     {
-        linePos.x = rotate ? 0 : x;
-        linePos.z = rotate ? y : 0;
+        lineData = Vector3.zero;
+        lineData.x = rotate ? 0 : x;
+        lineData.z = rotate ? y : 0;
         var line = Instantiate(borderLine, map);
-        line.transform.localPosition = linePos;
+        line.transform.localPosition = lineData;
 
         if (rotate)
         {
@@ -67,9 +69,9 @@ public class MapBuilder : MonoBehaviour, IVirtualMapSqare, IStrike, ISkinData
             lineRot.y = 0;
         }
 
-        linePos.x = linePos.y = 1;
-        linePos.z = mapSize.y;
-        line.transform.localScale = linePos;
+        lineData.x = lineData.y = 1;
+        lineData.z = mapSize.y;
+        line.transform.localScale = lineData;
     }
 
     void OffsetMap(Vector3 offset)
