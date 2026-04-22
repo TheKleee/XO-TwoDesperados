@@ -9,7 +9,7 @@ public class MapConfig : MonoBehaviour
     private void Start()
     {
         mapSizeCounter.Init(defaultVal: 3, minVal: 3, maxVal: 7);
-        playerCounter.Init(defaultVal: 2, minVal: 2, maxVal: 3);
+        playerCounter.Init(defaultVal: 2, minVal: 2, maxVal: 2);
         strikeCounter.Init(defaultVal: 3, minVal: 3, maxVal: 3);
     }
 
@@ -17,14 +17,14 @@ public class MapConfig : MonoBehaviour
     public void OnMapSizeIncrement()
     {
         mapSizeCounter.Increment();
-        playerCounter.SetMax(Mathf.Min(mapSizeCounter.Value, 6));
+        playerCounter.SetMax(Mathf.Min(mapSizeCounter.Value - 1, 6));
         strikeCounter.SetMax(mapSizeCounter.Value);
     }
 
     public void OnMapSizeDecrement()
     {
         mapSizeCounter.Decrement();
-        playerCounter.SetMax(Mathf.Min(mapSizeCounter.Value, 6));
+        playerCounter.SetMax(Mathf.Min(mapSizeCounter.Value - 1, 6));
         strikeCounter.SetMax(mapSizeCounter.Value);
     }
 

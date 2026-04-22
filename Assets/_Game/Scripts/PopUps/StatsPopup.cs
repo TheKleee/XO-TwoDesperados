@@ -2,6 +2,7 @@ using DataXO;
 using TMPro;
 using UnityEngine;
 
+[RequireComponent(typeof(PopupAnimator))]
 public class StatsPopup : MonoBehaviour
 {
     [SerializeField] GameObject panel;
@@ -12,6 +13,10 @@ public class StatsPopup : MonoBehaviour
 
     ScoreCalculator scoreCalculator;
 
+    PopupAnimator pa;
+    private void Awake() =>
+        pa = GetComponent<PopupAnimator>();
+
     private void Start() =>
         scoreCalculator = FindFirstObjectByType<ScoreCalculator>();
 
@@ -20,12 +25,16 @@ public class StatsPopup : MonoBehaviour
         Refresh();
         AudioManager.instance.PlayPopup();
         panel.SetActive(true);
+        pa.Show(panel.transform);
     }
 
     public void Close()
     {
-        AudioManager.instance.PlayPopup();
-        panel.SetActive(false);
+        pa.Hide(panel.transform, () =>
+        {
+            AudioManager.instance.PlayPopup();
+            panel.SetActive(false);
+        });
     }
 
     void Refresh()

@@ -1,6 +1,8 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(PopupAnimator))]
 public class ThemePopup : MonoBehaviour
 {
     [SerializeField] GameObject popupPanel;
@@ -9,18 +11,26 @@ public class ThemePopup : MonoBehaviour
     [SerializeField] MapConfig mapConfig;
     [SerializeField] SkinPicker skinPicker;
 
+    PopupAnimator pa;
+    private void Awake() =>    
+        pa = GetComponent<PopupAnimator>();
+    
     public void Open()
     {
         AudioManager.instance.PlayPopup();
         popupPanel.SetActive(true);
         mapConfigPanel.SetActive(true);
         skinPickerPanel.SetActive(false);
+        pa.Show(popupPanel.transform);
     }
 
     public void Close()
     {
-        AudioManager.instance.PlayPopup();
-        popupPanel.SetActive(false);
+        pa.Hide(popupPanel.transform, () =>
+        {
+            AudioManager.instance.PlayPopup();
+            popupPanel.SetActive(false);
+        });
     }
 
     public void OnBackClicked()

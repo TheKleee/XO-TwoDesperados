@@ -2,6 +2,7 @@ using DataXO;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(PopupAnimator))]
 public class SettingsPopup : MonoBehaviour
 {
     [SerializeField] GameObject panel;
@@ -9,6 +10,10 @@ public class SettingsPopup : MonoBehaviour
     [SerializeField] Toggle sfxToggle;
 
     SettingsData settings;
+
+    PopupAnimator pa;
+    private void Awake() =>
+        pa = GetComponent<PopupAnimator>();
 
     private void Start()
     {
@@ -24,12 +29,16 @@ public class SettingsPopup : MonoBehaviour
     {
         AudioManager.instance.PlayPopup();
         panel.SetActive(true);
+        pa.Show(panel.transform);
     }
 
     public void Close()
     {
-        AudioManager.instance.PlayPopup();
-        panel.SetActive(false);
+        pa.Hide(panel.transform, () =>
+        {
+            AudioManager.instance.PlayPopup();
+            panel.SetActive(false);
+        });
     }
 
     public void MusicToggle() =>
