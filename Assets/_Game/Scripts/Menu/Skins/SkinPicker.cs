@@ -11,9 +11,11 @@ public class SkinPicker : MonoBehaviour
     List<byte> availableSkins;
     byte currentPickingPlayer;
     byte playerCount;
+    bool done;
 
     public void Init(byte count)
     {
+        done = false;
         playerCount = count;
         currentPickingPlayer = 1;
         availableSkins = new List<byte>();
@@ -29,14 +31,17 @@ public class SkinPicker : MonoBehaviour
 
     public void OnSkinSelected(int skinId)
     {
-        if (!availableSkins.Contains((byte)skinId)) return;
+        if (done || !availableSkins.Contains((byte)skinId)) return;
         MapBuilder.instance.playerSkinMap[currentPickingPlayer] = (byte)skinId;
         availableSkins.Remove((byte)skinId);
         skinButtons[skinId].interactable = false;
         currentPickingPlayer++;
 
         if (currentPickingPlayer > playerCount)
+        {
+            done = true;
             promptText.text = "Ready!";
+        }
         else
             RefreshPrompt();
     }

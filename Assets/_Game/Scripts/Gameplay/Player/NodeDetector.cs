@@ -50,7 +50,7 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
         node.GetComponent<Node>().Init(currentPlayer);
         AudioManager.instance.PlayPlacement();
 
-        cc.FocusOn(node.transform.position); //Following the node for large maps :D
+        cc.FocusOn(GetAdjacentOpenField(gridPos)); //Following the closest open field to make sure we can always see one :D
 
         if (WinCondition(currentPlayer))
         {
@@ -120,5 +120,25 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
         foreach (var cell in map.virtualMap.Values)
             if (cell == null) return false;
         return true;
+    }
+
+    Vector3 GetAdjacentOpenField(Vector2Int placed)
+    {
+        int maxRadius = Mathf.Max(map.mapSize.x, map.mapSize.y);
+
+        for (int radius = 1; radius < maxRadius; radius++)
+            for (int x = -radius; x <= radius; x++)
+                for (int y = -radius; y <= radius; y++)
+                {
+                    // Only check the outer ring of current radius
+                    if (Mathf.Abs(x) != radius && Mathf.Abs(y) != radius) continue;
+
+                    Vector2Int candidate = placed + new Vector2Int(x, y);
+                    if (map.IsOnMap(candidate) && map.virtualMap[candidate] == null)
+                        return map.GridToWorld(new Vector2(candidate.x + 0.5f, candidate.y + 0.5f));
+                }
+
+        // Board is full, stay on placed node
+        return map.GridToWorld(new Vector2(placed.x + 0.5f, placed.y + 0.5f));
     }
 }
