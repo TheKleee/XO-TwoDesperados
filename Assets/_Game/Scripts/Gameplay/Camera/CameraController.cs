@@ -10,7 +10,8 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         cam = Camera.main;
-        targetPos = transform.position;
+        float pos = (float)MapBuilder.instance.mapSize.x / 2;
+        targetPos = new Vector3(pos, cam.transform.position.y, pos);
 
         // Only follow if map is larger than what the camera can see
         float camHeight = 2f * cam.orthographicSize;
