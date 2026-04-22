@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     [Header("Popups:")]
     [SerializeField] GameResultPopup gameResultPopup;
 
+    [Header("End Flare"), SerializeField] GameObject endFlare;
+
     public byte CurrentPlayer { get; private set; } = 1;
     public Vector2Int LastPlaced { get; private set; }
 
@@ -47,7 +49,6 @@ public class GameManager : MonoBehaviour
     public void OnWin(byte playerId, Vector2Int start, Vector2Int end)
     {
         HUD.instance.StopMatch();
-
         scoreCalculator.RecordWin(playerId, HUD.instance.MatchDuration);
         Vector3 startWorld = map.GridToWorld(start);
         Vector3 endWorld = map.GridToWorld(end);
@@ -56,10 +57,10 @@ public class GameManager : MonoBehaviour
         Strike strike = line.GetComponent<Strike>();
         strike.Init(startWorld, endWorld, () =>
         {
+            float pos = (float)MapBuilder.instance.mapSize.x / 2;
+            Instantiate(endFlare, new Vector3(pos, 0, pos), Quaternion.identity);
             gameResultPopup.OpenWin(playerId, HUD.instance.MatchDuration);
-        });
-
-        
+        });        
     }
 
     public void OnDraw()

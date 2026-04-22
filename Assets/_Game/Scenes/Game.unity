@@ -2013,6 +2013,7 @@ MonoBehaviour:
   playerCount: 2
   strikeLinePrefab: {fileID: 9217744484526075331, guid: 5a803323849d65345a198140c809e196, type: 3}
   gameResultPopup: {fileID: 1664668017}
+  endFlare: {fileID: 2379190872514773674, guid: 402428a911d64894e9cf1d54e382c0a8, type: 3}
 --- !u!1 &811688378
 GameObject:
   m_ObjectHideFlags: 0
@@ -5368,10 +5369,10 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -3
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.7607844, g: 0.7607844, b: 0.7607844, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5393,6 +5394,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NodeDetector
   nodePrefab: {fileID: 7838331538719001593, guid: 15384a6d07277c147af54cb8b81bed67, type: 3}
+  placementEffectPrefab:
+  - {fileID: 7234509404468064421, guid: efb90238e0db20c418625ff60ce646a5, type: 3}
+  - {fileID: 8396285562473499668, guid: ade056bfb25e8bd4ca79ca52117b8ef8, type: 3}
+  basePlacementEffectPrefab: {fileID: 7336584308524232400, guid: 46ad74f74bc3ac348b6e04bd586a8b52, type: 3}
 --- !u!65 &2004156397
 BoxCollider:
   m_ObjectHideFlags: 0

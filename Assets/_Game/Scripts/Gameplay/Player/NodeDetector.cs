@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
 {
     [Header("Node:"), SerializeField] GameObject nodePrefab;
+    [Header("Effects:"), SerializeField] GameObject[] placementEffectPrefab;
+    [SerializeField] GameObject basePlacementEffectPrefab;
     public Dictionary<byte, bool> playerList { get; set; } = new();
     public int strike { get; set; }
     CameraController cc;
@@ -50,6 +52,14 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
         node.GetComponent<Node>().Init(currentPlayer);
         AudioManager.instance.PlayPlacement();
 
+        //To show alternating particle effects based on which player placed the node :D
+        Instantiate(basePlacementEffectPrefab, node.transform.position, Quaternion.identity);
+        Instantiate(currentPlayer % 2 == 0 ?
+            placementEffectPrefab[0] :
+            placementEffectPrefab[1],
+            node.transform.position,
+            Quaternion.identity);
+
         cc.FocusOn(GetAdjacentOpenField(gridPos)); //Following the closest open field to make sure we can always see one :D
 
         if (WinCondition(currentPlayer))
@@ -85,34 +95,46 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
         Vector2Int placed = GameManager.instance.LastPlaced;
         foreach (var dir in CheckDirections)
         {
-            if (WalkDirection(placed, dir, playerId) == strike)
+            var (strikes, firstNode) = WalkDirection(placed, dir, playerId);
+            if (strikes == strike)
             {
-                GameManager.instance.OnWin(playerId, placed, endpoint);
+                GameManager.instance.OnWin(playerId, firstNode, endpoint);
                 return true;
             }
-            if (WalkDirection(placed, -dir, playerId) == strike)
-            {
-                GameManager.instance.OnWin(playerId, endpoint, placed);
-                return true;
-            }
+            //if (WalkDirection(placed, -dir, playerId) == strike)
+            //{
+            //    GameManager.instance.OnWin(playerId, endpoint, placed);
+            //    return true;
+            //}
         }
         return false;
     }
 
-    int WalkDirection(Vector2Int current, Vector2Int dir, byte playerId, int curLength = 1)
+    (int, Vector2Int) WalkDirection(Vector2Int current, Vector2Int dir, byte playerId, int curLength = 1, bool lastSearch = false, Vector2Int? firstPlaced = null)
     {
+        if (firstPlaced == null)
+            firstPlaced = current;
+
         if (curLength == strike)
         {
             endpoint = current;
-            return curLength;
+            return (curLength, (Vector2Int)firstPlaced);
         }
         Vector2Int next = current + dir;
         if (!map.IsOnMap(next) || map.virtualMap[next] != playerId)
         {
+            //Here we need to go backwards... from the starting point
+            if (!lastSearch)
+            {
+                firstPlaced = null;
+                lastSearch = true;
+                return WalkDirection(current, -dir, playerId, 1, lastSearch);
+            }
+
             endpoint = current;
-            return curLength;
+            return (curLength, (Vector2Int)firstPlaced);
         }
-        return WalkDirection(next, dir, playerId, ++curLength);
+        return WalkDirection(next, dir, playerId, ++curLength, lastSearch, firstPlaced);
     }
 
     bool IsBoardFull()

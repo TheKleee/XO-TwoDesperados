@@ -6,6 +6,11 @@ public class Strike : MonoBehaviour
     [SerializeField] float duration = 0.1f;
     [SerializeField] LineRenderer lineRenderer;
 
+    [Header("Effects:")]
+    [SerializeField] GameObject trailEffect;
+    [SerializeField] float spawnInterval = 0.01f;
+    [SerializeField] float effectLifespan = 0.1f;
+
     public void Init(Vector3 startPos, Vector3 endPos, System.Action onComplete)
     {
         startPos.x += .5f;
@@ -30,11 +35,24 @@ public class Strike : MonoBehaviour
     {
         AudioManager.instance.PlayStrike();
         float elapsed = 0f;
+        float lastSpawnTime = 0f;
+
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
             float t = elapsed / duration;
-            lineRenderer.SetPosition(1, Vector3.Lerp(start, end, t));
+
+            Vector3 current = Vector3.Lerp(start, end, t);
+            lineRenderer.SetPosition(1, current);
+            
+            if (elapsed - lastSpawnTime >= spawnInterval)
+            {
+                current.y += .2f;
+                lastSpawnTime = elapsed;
+                var p = Instantiate(trailEffect, current, Quaternion.identity);
+                Destroy(p, effectLifespan);
+            }
+
             yield return null;
         }
         lineRenderer.SetPosition(1, end);

@@ -79,7 +79,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: -2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1911955063, guid: 0ec6158c993d2be418a65a741a15c460, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -144,3 +144,10 @@ MonoBehaviour:
   - {fileID: 384984492, guid: 0ec6158c993d2be418a65a741a15c460, type: 3}
   - {fileID: 895809154, guid: 0ec6158c993d2be418a65a741a15c460, type: 3}
   - {fileID: -1505708696, guid: 0ec6158c993d2be418a65a741a15c460, type: 3}
+  popDuration: 0.1
+  popCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

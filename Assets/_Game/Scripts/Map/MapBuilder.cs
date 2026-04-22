@@ -74,10 +74,8 @@ public class MapBuilder : MonoBehaviour, IVirtualMapSqare, IStrike, ISkinData
         line.transform.localScale = lineData;
     }
 
-    void OffsetMap(Vector3 offset)
-    {
-        //Calculate offsetposition...
+    void OffsetMap(Vector3 offset) =>    
         map.position -= offset;
-    }
+    
     #endregion methods />
 }

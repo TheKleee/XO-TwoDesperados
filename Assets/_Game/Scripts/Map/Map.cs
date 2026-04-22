@@ -4,16 +4,6 @@ using UnityEngine;
 
 public class Map : MonoBehaviour, IVirtualMapSqare, IVirtualMapXO, IMapHelper
 {
-    //#region Singleton
-    //public static Map instance;
-    //private void Awake()
-    //{
-    //    if (instance != null)        
-    //        Destroy(gameObject);
-    //    instance = this;
-    //}
-    //#endregion singleton />
-
     [Header("Background"), SerializeField] Transform background;
 
     #region VirtualMapData

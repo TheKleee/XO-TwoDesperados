@@ -45,8 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2b0009bf3b5adb4a9669ebdd5c3aef9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Strike
-  duration: 0.3
+  duration: 0.1
   lineRenderer: {fileID: 8641761115896771620}
+  trailEffect: {fileID: 4631590575024086908, guid: b615460a4186c0743aa10df5e7e3ddc3, type: 3}
+  spawnInterval: 0.0025
 --- !u!120 &8641761115896771620
 LineRenderer:
   serializedVersion: 3
@@ -94,7 +96,7 @@ LineRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
