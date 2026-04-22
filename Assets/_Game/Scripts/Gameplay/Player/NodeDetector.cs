@@ -7,6 +7,8 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
     [Header("Node:"), SerializeField] GameObject nodePrefab;
     public Dictionary<byte, bool> playerList { get; set; } = new();
     public int strike { get; set; }
+    CameraController cc;
+    bool gameOver;
 
     static readonly Vector2Int[] CheckDirections =
     {
@@ -22,37 +24,44 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
     private void Start()
     {
         map = FindFirstObjectByType<Map>();
+        cc = FindFirstObjectByType<CameraController>();
         strike = MapBuilder.instance.strike;
     }
 
     private void Update()
     {
-        if (!IsPressed()) return;
+        if (!IsPressed() || gameOver) return;
         Ray ray = Camera.main.ScreenPointToRay(GetScreenPosition());
-        if (!Physics.Raycast(ray, out RaycastHit hit))
-        {
-            Debug.Log("Raycast missed");
-            return;
-        }
+        if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
-        Vector2Int gridPos = map.WorldToGrid(hit.point);
-        Debug.Log($"Hit: {hit.point} | Grid: {gridPos} | OnMap: {map.IsOnMap(gridPos)}");
+        var hp = new Vector3((int)hit.point.x, 0, (int)hit.point.z);
+        Vector2Int gridPos = map.WorldToGrid(hp);
 
         byte currentPlayer = GameManager.instance.CurrentPlayer;
 
         if (!map.IsOnMap(gridPos) || map.virtualMap[gridPos] != null) return;
 
         map.UpdateMap(gridPos, currentPlayer);
+        HUD.instance.RegisterMove(currentPlayer);
         GameManager.instance.RegisterPlacement(gridPos);
 
-        var node = Instantiate(nodePrefab, map.GridToWorld(gridPos), Quaternion.identity);
+        var gridPosMap = new Vector2(gridPos.x + 0.5f, gridPos.y + 0.5f); //Visual offset on the map :)
+        var node = Instantiate(nodePrefab, map.GridToWorld(gridPosMap), Quaternion.identity, map.transform);
         node.GetComponent<Node>().Init(currentPlayer);
         AudioManager.instance.PlayPlacement();
 
+        cc.FocusOn(node.transform.position); //Following the node for large maps :D
+
         if (WinCondition(currentPlayer))
+        {
+            gameOver = true;
             playerList[currentPlayer] = true;
+        }
         else if (IsBoardFull())
+        {
+            gameOver = true;
             GameManager.instance.OnDraw();
+        }
         else
             GameManager.instance.NextTurn();
     }
@@ -90,7 +99,7 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
         return false;
     }
 
-    int WalkDirection(Vector2Int current, Vector2Int dir, byte playerId, int curLength = 0)
+    int WalkDirection(Vector2Int current, Vector2Int dir, byte playerId, int curLength = 1)
     {
         if (curLength == strike)
         {

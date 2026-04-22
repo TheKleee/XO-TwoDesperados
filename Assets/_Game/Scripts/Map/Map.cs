@@ -72,7 +72,7 @@ public class Map : MonoBehaviour, IVirtualMapSqare, IVirtualMapXO, IMapHelper
         return new Vector2Int(Mathf.RoundToInt(local.x), Mathf.RoundToInt(local.z));
     }
 
-    public Vector3 GridToWorld(Vector2Int gridPos)
+    public Vector3 GridToWorld(Vector2 gridPos)
     {
         Vector3 local = new Vector3(gridPos.x, 0, gridPos.y);
         return transform.TransformPoint(local);

@@ -13,8 +13,8 @@ public class HUD : MonoBehaviour
         instance = this;
     }
 
-    public void RegisterMove(byte playerId, int count) =>
-        moveCounter.RegisterMove(playerId, count);
+    public void RegisterMove(byte playerId) =>
+        moveCounter.RegisterMove(playerId);
 
     public void StopMatch() =>
         durationDisplay.Stop();

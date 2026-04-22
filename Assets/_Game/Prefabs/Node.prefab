@@ -139,8 +139,8 @@ MonoBehaviour:
   spriteRenderer: {fileID: 1227079140385843511}
   skins:
   - {fileID: 1911955063, guid: 0ec6158c993d2be418a65a741a15c460, type: 3}
-  - {fileID: -401174035, guid: 0ec6158c993d2be418a65a741a15c460, type: 3}
-  - {fileID: 895809154, guid: 0ec6158c993d2be418a65a741a15c460, type: 3}
   - {fileID: 524800311, guid: 0ec6158c993d2be418a65a741a15c460, type: 3}
+  - {fileID: -401174035, guid: 0ec6158c993d2be418a65a741a15c460, type: 3}
   - {fileID: 384984492, guid: 0ec6158c993d2be418a65a741a15c460, type: 3}
+  - {fileID: 895809154, guid: 0ec6158c993d2be418a65a741a15c460, type: 3}
   - {fileID: -1505708696, guid: 0ec6158c993d2be418a65a741a15c460, type: 3}

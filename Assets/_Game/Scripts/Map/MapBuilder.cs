@@ -23,7 +23,7 @@ public class MapBuilder : MonoBehaviour, IVirtualMapSqare, IStrike, ISkinData
     #endregion singleton />
     Transform map;
     [Header("Node"), SerializeField] GameObject borderLine;
-    Vector3 lineData = Vector3.zero, lineRot = Vector3.zero;
+    Vector3Int lineData = Vector3Int.zero, lineRot = Vector3Int.zero;
 
     #region InterfaceData
     public byte playerCount { get; set; } = 2;
@@ -56,9 +56,9 @@ public class MapBuilder : MonoBehaviour, IVirtualMapSqare, IStrike, ISkinData
 
     void CreateBorderLine(float x, float y, bool rotate = true)
     {
-        lineData = Vector3.zero;
-        lineData.x = rotate ? 0 : x;
-        lineData.z = rotate ? y : 0;
+        lineData = Vector3Int.zero;
+        lineData.x = rotate ? 0 : (int)x;
+        lineData.z = rotate ? (int)y : 0;
         var line = Instantiate(borderLine, map);
         line.transform.localPosition = lineData;
 

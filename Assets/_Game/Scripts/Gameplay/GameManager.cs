@@ -54,9 +54,12 @@ public class GameManager : MonoBehaviour
 
         GameObject line = Instantiate(strikeLinePrefab, startWorld, Quaternion.identity);
         Strike strike = line.GetComponent<Strike>();
-        strike.Init(startWorld, endWorld);
+        strike.Init(startWorld, endWorld, () =>
+        {
+            gameResultPopup.OpenWin(playerId, HUD.instance.MatchDuration);
+        });
 
-        gameResultPopup.OpenWin(playerId, HUD.instance.MatchDuration);
+        
     }
 
     public void OnDraw()
