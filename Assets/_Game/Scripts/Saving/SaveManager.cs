@@ -1,24 +1,32 @@
-using System.IO;
-using UnityEngine;
 using DataXO;
+using UnityEngine;
 
 public static class SaveManager
 {
-    static readonly string StatsPath = Application.persistentDataPath + "/stats.json";
-    static readonly string SettingsPath = Application.persistentDataPath + "/settings.json";
+    const string StatsKey = "stats";
+    const string SettingsKey = "settings";
 
-    public static StatsData LoadStats() => Load<StatsData>(StatsPath) ?? new StatsData();
-    public static SettingsData LoadSettings() => Load<SettingsData>(SettingsPath) ?? new SettingsData();
-
-    public static void SaveStats(StatsData data) => Save(StatsPath, data);
-    public static void SaveSettings(SettingsData data) => Save(SettingsPath, data);
-
-    static void Save<T>(string path, T data) =>
-        File.WriteAllText(path, JsonUtility.ToJson(data, prettyPrint: true));
-
-    static T Load<T>(string path) where T : class
+    public static StatsData LoadStats()
     {
-        if (!File.Exists(path)) return null;
-        return JsonUtility.FromJson<T>(File.ReadAllText(path));
+        if (!PlayerPrefs.HasKey(StatsKey)) return new StatsData();
+        return JsonUtility.FromJson<StatsData>(PlayerPrefs.GetString(StatsKey));
+    }
+
+    public static SettingsData LoadSettings()
+    {
+        if (!PlayerPrefs.HasKey(SettingsKey)) return new SettingsData();
+        return JsonUtility.FromJson<SettingsData>(PlayerPrefs.GetString(SettingsKey));
+    }
+
+    public static void SaveStats(StatsData data)
+    {
+        PlayerPrefs.SetString(StatsKey, JsonUtility.ToJson(data));
+        PlayerPrefs.Save(); // critical on WebGL
+    }
+
+    public static void SaveSettings(SettingsData data)
+    {
+        PlayerPrefs.SetString(SettingsKey, JsonUtility.ToJson(data));
+        PlayerPrefs.Save(); // critical on WebGL
     }
 }

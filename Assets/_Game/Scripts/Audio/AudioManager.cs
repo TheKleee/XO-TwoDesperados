@@ -8,6 +8,7 @@ public class AudioManager : MonoBehaviour
     private void Awake()
     {
         if (instance != null) { Destroy(gameObject); return; }
+        OrientationBridge.Unlock();
         instance = this;
         DontDestroyOnLoad(gameObject);
     }

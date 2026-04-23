@@ -30,6 +30,7 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
         strike = MapBuilder.instance.strike;
     }
 
+
     private void Update()
     {
         if (!IsPressed() || gameOver) return;
@@ -78,15 +79,15 @@ public class NodeDetector : MonoBehaviour, IWinCondition, IStrike
 
     bool IsPressed()
     {
-        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) return true;
-        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame) return true;
+        if (Pointer.current != null && Pointer.current.press.wasPressedThisFrame)
+            return true;
         return false;
     }
 
     Vector2 GetScreenPosition()
     {
-        if (Mouse.current != null) return Mouse.current.position.ReadValue();
-        if (Touchscreen.current != null) return Touchscreen.current.primaryTouch.position.ReadValue();
+        if (Pointer.current != null)
+            return Pointer.current.position.ReadValue();
         return Vector2.zero;
     }
 
